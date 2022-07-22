@@ -1,0 +1,2 @@
+
+FARMER_AGE = 60
