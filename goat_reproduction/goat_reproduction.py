@@ -17,46 +17,44 @@ GOAT_GENDER_DICT = goat_dict_populator(GOAT_NUMBER)[1]
 GOAT_AGE_DICT = goat_dict_populator(GOAT_NUMBER)[0]
 
 
+def get_goat_gender(goat_age_dict: dict[str, str],
+                    goat_gender_dict: dict[str, str],
+                    gender: str) -> dict[str, str]:
+
+    return {key: goat_age_dict[key] for key
+            in goat_age_dict.keys()
+            if goat_gender_dict[key] == gender}
+
+
+def get_reproducible_goats(goat_dict: dict[str, str]) -> int:
+
+    return len({key: goat_dict[key] for key
+                in goat_dict.keys()
+                if
+                int(goat_dict[key]) > MIN_FEM_REPRODUCTION_AGE
+                and
+                int(goat_dict[key]) < MAX_FEM_REPRODUCTION_AGE})
+
+
 def female_goats() -> dict:
-    return {key: GOAT_AGE_DICT[key] for key
-            in GOAT_GENDER_DICT.keys()
-            if GOAT_GENDER_DICT[key] == 'F'}
+    gender = 'F'
+    return get_goat_gender(GOAT_AGE_DICT, GOAT_GENDER_DICT, gender=gender)
 
 
 def male_goats() -> dict:
-    return {key: GOAT_AGE_DICT[key] for key
-            in GOAT_GENDER_DICT.keys()
-            if GOAT_GENDER_DICT[key] == 'M'}
+    gender = 'M'
+    return get_goat_gender(GOAT_AGE_DICT, GOAT_GENDER_DICT, gender=gender)
 
 
 def female_that_can_reproduce() -> int:
-    fem_goats = female_goats()
-
-    reproductive_fem_goats = {key: fem_goats[key] for key
-                              in fem_goats.keys()
-                              if
-                              int(fem_goats[key]) > MIN_FEM_REPRODUCTION_AGE
-                              and
-                              int(fem_goats[key]) < MAX_FEM_REPRODUCTION_AGE}
-
-    return len(reproductive_fem_goats)
+    return get_reproducible_goats(female_goats())
 
 
 def male_that_can_reproduce() -> int:
-    he_goats = male_goats()
-
-    reproductive_male_goats = {key: he_goats[key] for key
-                               in he_goats.keys()
-                               if
-                               int(he_goats[key]) > MIN_MALE_REPRODUCTION_AGE
-                               and
-                               int(he_goats[key]) < MAX_MALE_REPRODUCTION_AGE}
-
-    return len(reproductive_male_goats)
+    return get_reproducible_goats(male_goats())
 
 
 def main():
-    # Please, refactor this code, there is a lot of code repetition.
     print(f"{female_that_can_reproduce()=}")
     print(f"{male_that_can_reproduce()=}")
 
